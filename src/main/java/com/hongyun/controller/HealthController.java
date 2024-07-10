@@ -10,6 +10,7 @@ public class HealthController {
 
     @GetMapping(value = "/test")
     public String test(){
+        System.out.println("hello world");
         return "I'm ok";
     }
 }
