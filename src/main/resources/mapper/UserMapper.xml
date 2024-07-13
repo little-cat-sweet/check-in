@@ -6,4 +6,10 @@
         SELECT * FROM user
     </select>
 
+    <insert id="insert" parameterType="com.hongyun.entity.User">
+        insert into user (name, email, password) values (#{name}, #{email}, #{password});
+    </insert>
+
+
+
 </mapper>

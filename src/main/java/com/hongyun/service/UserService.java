@@ -7,5 +7,7 @@ import java.util.List;
 
 public interface UserService {
 
-    ResponseObjectVO findUsers();
+    ResponseObjectVO<List<User>> findUsers();
+
+    String register(User user);
 }

@@ -32,3 +32,8 @@ mybatis:
     useColumnLabel: true
     # 是否开启驼峰命名映射
     mapUnderscoreToCamelCase: true
+
+
+jwt-constants:
+  secret: hello_world
+  expiration: 3600
