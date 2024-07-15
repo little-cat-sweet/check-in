@@ -9,7 +9,9 @@ import com.hongyun.service.UserService;
 import com.hongyun.util.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,6 +24,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private JwtUtils jwtUtils;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     private Log log = LogFactory.get();
     @Override
     public ResponseObjectVO<List<User>> findUsers() {
@@ -32,6 +37,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public String register(User user) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         user.setPassword(encoder.encode(user.getPassword()));
@@ -41,5 +47,18 @@ public class UserServiceImpl implements UserService {
             return token;
         }
         return token;
+    }
+
+    @Override
+    public com.hongyun.dto.vo.User login(String email, String password) {
+        User user = userMapper.findByEmail(email);
+        if (user != null && passwordEncoder.matches(password, user.getPassword())) { // 使用 passwordEncoder.matches() 方法验证密码
+            // 将 token 返回给客户端
+            com.hongyun.dto.vo.User resUser = new com.hongyun.dto.vo.User();
+            resUser.setName(user.getName());
+            resUser.setToken(jwtUtils.generateToken(user));
+            return resUser;
+        }
+        return null;
     }
 }

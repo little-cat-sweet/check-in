@@ -2,7 +2,7 @@ package com.hongyun.controller;
 
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
-import com.hongyun.Constants.NormalConstants;
+import com.hongyun.constants.NormalConstants;
 import com.hongyun.common.ResponseObjectVO;
 import com.hongyun.entity.User;
 import com.hongyun.service.UserService;
@@ -37,7 +37,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/register")
-    public ResponseObjectVO<String> register(@RequestBody User user){
+    public ResponseObjectVO<String> register(@RequestBody User user) {
         ResponseObjectVO<String> response = new ResponseObjectVO<>();
         String token = null;
         try {
@@ -47,5 +47,18 @@ public class UserController {
             return response.getFailResponseVo(NormalConstants.ERROR_MESSAGE);
         }
         return response.getSuccess("register successfully !", token);
+    }
+
+    @PostMapping(value = "/login")
+    public ResponseObjectVO<com.hongyun.dto.vo.User> login(@RequestParam String email, @RequestParam String password) {
+        ResponseObjectVO<com.hongyun.dto.vo.User> response = new ResponseObjectVO<>();
+        com.hongyun.dto.vo.User user = null;
+        try {
+            user = userService.login(email, password);
+        } catch (Exception e) {
+            log.error("login failed -> {}", e.getMessage());
+            return response.getFailResponseVo("login failed !");
+        }
+        return response.getSuccess("login successfully !", user);
     }
 }

@@ -1,4 +1,4 @@
-package com.hongyun.Constants;
+package com.hongyun.constants;
 
 public class NormalConstants {
 

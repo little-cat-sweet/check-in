@@ -10,4 +10,6 @@ public interface UserService {
     ResponseObjectVO<List<User>> findUsers();
 
     String register(User user);
+
+    com.hongyun.dto.vo.User login(String email, String password);
 }

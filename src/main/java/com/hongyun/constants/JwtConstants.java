@@ -1,4 +1,4 @@
-package com.hongyun.Constants;
+package com.hongyun.constants;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

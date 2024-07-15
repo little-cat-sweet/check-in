@@ -10,4 +10,6 @@ public interface UserMapper {
     List<User> getAll();
 
     int insert(User user);
+
+    User findByEmail(String email);
 }
