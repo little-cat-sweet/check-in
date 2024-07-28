@@ -2,10 +2,10 @@ package com.hongyun.interceptor;
 
 import com.hongyun.dto.vo.User;
 import com.hongyun.util.UserHolder;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Objects;
 
 public class LoginInterceptor implements HandlerInterceptor {

@@ -41,3 +41,9 @@ mybatis:
     useColumnLabel: true
     # 是否开启驼峰命名映射
     mapUnderscoreToCamelCase: true
+
+email:
+  host: smtp.qq.com
+  from: 851891179@qq.com
+  user: Mark
+  passcode: ktyfuelwoypibcfc

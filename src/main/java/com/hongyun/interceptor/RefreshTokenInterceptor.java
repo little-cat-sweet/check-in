@@ -5,12 +5,12 @@ import com.hongyun.constants.NormalConstants;
 import com.hongyun.constants.RedisConstants;
 import com.hongyun.dto.vo.User;
 import com.hongyun.util.UserHolder;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.time.Duration;
 import java.util.Map;
 

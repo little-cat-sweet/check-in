@@ -11,9 +11,15 @@
     </insert>
 
 
-    <select id="findByEmail" parameterType="com.hongyun.entity.User">
+    <select id="findByEmail" resultType="com.hongyun.entity.User">
         select * from user where email = #{email}
     </select>
+    <update id="updatePassword" parameterType="com.hongyun.entity.User">
+        update user set password = #{password} where email = #{email}
+    </update>
+
+
+
 
 
 
