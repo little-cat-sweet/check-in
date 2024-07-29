@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hongyun.mapper.TargetItemMapper">
+
+    <update id="updateStatus" parameterType="map">
+        UPDATE target_item
+        SET status = #{status}
+        WHERE id = #{id}
+    </update>
+
+    <resultMap id="targetItemResultMap" type="com.hongyun.entity.TargetItem">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="status" column="status"/>
+        <result property="targetId" column="target_id"/>
+    </resultMap>
+
+    <select id="findByUserIdAndCreateTime" resultMap="targetItemResultMap" parameterType="map">
+        SELECT *
+        FROM target_item
+        WHERE user_id = #{userId}
+          AND create_time = #{createTime}
+    </select>
+
+
+    <insert id="addItem" parameterType="com.hongyun.entity.TargetItem">
+        insert into user (target_id, user_id, status, create_time) values (#{targetId}, #{userId}, #{status}, #{createTime});
+    </insert>
+</mapper>
