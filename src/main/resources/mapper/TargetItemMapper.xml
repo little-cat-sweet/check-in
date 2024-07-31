@@ -25,6 +25,6 @@
 
 
     <insert id="addItem" parameterType="com.hongyun.entity.TargetItem">
-        insert into user (target_id, user_id, status, create_time) values (#{targetId}, #{userId}, #{status}, #{createTime});
+        insert into target_item (target_id, user_id, status, create_time) values (#{targetId}, #{userId}, #{status}, #{createTime});
     </insert>
 </mapper>

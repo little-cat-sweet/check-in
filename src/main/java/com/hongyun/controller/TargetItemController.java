@@ -6,9 +6,10 @@ import com.hongyun.constants.NormalConstants;
 import com.hongyun.entity.TargetItem;
 import com.hongyun.service.TargetItemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -51,7 +52,8 @@ public class TargetItemController {
 
 
     @GetMapping(value = "/showItems")
-    public ResponseObjectVO<List<TargetItem>> showTargetItems(@RequestParam Integer userId, @RequestParam Date time) {
+    public ResponseObjectVO<List<TargetItem>> showTargetItems(@RequestParam Integer userId,
+                                                              @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime time) {
 
         ResponseObjectVO<List<TargetItem>> response = new ResponseObjectVO<>();
         List<TargetItem> data = null;

@@ -6,6 +6,7 @@ import com.hongyun.service.TargetItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -22,12 +23,13 @@ public class TargetItemServiceImpl implements TargetItemService {
     }
 
     @Override
-    public List<TargetItem> getTargetItems(Integer userId, Date time) {
+    public List<TargetItem> getTargetItems(Integer userId, LocalDateTime time) {
         return targetItemMapper.findByUserIdAndCreateTime(userId, time);
     }
 
     @Override
     public boolean addItem(TargetItem targetItem) {
+        targetItem.setCreateTime(new Date());
         int res = targetItemMapper.addItem(targetItem);
         return res == 1;
     }
