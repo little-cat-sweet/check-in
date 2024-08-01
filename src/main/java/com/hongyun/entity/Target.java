@@ -11,5 +11,5 @@ public class Target {
     private String name;
     private String description;
     private Date createTime;
-    private Character day;
+    private Integer day;
 }

@@ -14,4 +14,6 @@ public interface TargetMapper {
     List<Target> findByUserId(Integer userId);
 
     int updateBy(String name, Integer id);
+
+    int deleteBy(Integer id);
 }

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hongyun.mapper.TargetMapper">
     <insert id="addTarget" parameterType="com.hongyun.entity.Target">
-        insert into user (user_id, name, description, create_time, day)
+        insert into target (user_id, name, description, create_time, day)
         values (#{userId}, #{name}, #{description}, #{createTime}, #{day});
     </insert>
 
@@ -26,5 +26,9 @@
         SET name = #{name}
         WHERE id = #{id}
     </update>
+
+    <delete id="deleteBy" parameterType="map">
+        delete from target where id = #{id}
+    </delete>
 
 </mapper>
