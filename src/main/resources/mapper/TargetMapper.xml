@@ -21,6 +21,11 @@
         WHERE user_id = #{userId}
     </select>
 
+    <select id="findAll" resultMap="targetResultMap" parameterType="map">
+        SELECT *
+        FROM target
+    </select>
+
     <update id="updateBy" parameterType="map">
         UPDATE target
         SET name = #{name}

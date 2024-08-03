@@ -14,4 +14,6 @@ public interface TargetItemMapper {
     List<TargetItem> findByUserIdAndCreateTime(Integer userId, LocalDateTime createTime);
 
     int addItem(TargetItem targetItem);
+
+    int addItems(List<TargetItem> targetItems);
 }

@@ -9,6 +9,6 @@ public class TargetItem {
     private Integer id;
     private Integer targetId;
     private Integer userId;
-    private Character status;
+    private int status;
     private Date createTime;
 }

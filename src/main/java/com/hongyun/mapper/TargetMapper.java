@@ -16,4 +16,6 @@ public interface TargetMapper {
     int updateBy(String name, Integer id);
 
     int deleteBy(Integer id);
+
+    List<Target> findAll();
 }
