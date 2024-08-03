@@ -7,6 +7,7 @@ import com.hongyun.entity.Target;
 import com.hongyun.entity.TargetItem;
 import com.hongyun.mapper.TargetItemMapper;
 import com.hongyun.mapper.TargetMapper;
+import com.hongyun.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -29,7 +30,11 @@ public class GenerateTargetItems {
     @Autowired
     private TargetItemMapper targetItemMapper;
 
-    @Scheduled(cron = "0 0 0 * * *") // 每天凌晨零点触发
+    @Autowired
+    private DateUtil dateUtil;
+
+//    @Scheduled(cron = "0 0 0 * * *") // 每天凌晨零点触发
+    @Scheduled(fixedDelay = 10000)
     public void generateTargetItems() {
 
         int nowWeekDay = getWeekDay();
@@ -40,7 +45,7 @@ public class GenerateTargetItems {
                 .map(target -> {
                     TargetItem targetItem = new TargetItem();
                     targetItem.setTargetId(target.getId());
-                    targetItem.setCreateTime(new Date());
+                    targetItem.setCreateTime(dateUtil.getYYYY_MM_DD_DateByNow());
                     targetItem.setUserId(target.getUserId());
                     return targetItem;
                 })

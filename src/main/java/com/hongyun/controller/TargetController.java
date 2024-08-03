@@ -5,10 +5,10 @@ import com.hongyun.common.ResponseObjectVO;
 import com.hongyun.constants.NormalConstants;
 import com.hongyun.entity.Target;
 import com.hongyun.service.TargetService;
+import com.hongyun.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -21,12 +21,15 @@ public class TargetController {
     @Autowired
     private TargetService targetService;
 
+    @Autowired
+    private DateUtil dateUtil;
+
     @PostMapping(value = "/add")
     public ResponseObjectVO<String> addTarget(@RequestBody Target target) {
         Integer res = null;
         ResponseObjectVO<String> responseObjectVO = new ResponseObjectVO<>();
         try {
-            target.setCreateTime(new Date());
+            target.setCreateTime(dateUtil.getYYYY_MM_DD_DateByNow());
             res = targetService.add(target);
             if (res > 0) {
                 return responseObjectVO.getSuccessResponseVo(NormalConstants.SUCCESS);

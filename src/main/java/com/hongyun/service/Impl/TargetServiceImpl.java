@@ -3,6 +3,7 @@ package com.hongyun.service.Impl;
 import com.hongyun.entity.Target;
 import com.hongyun.mapper.TargetMapper;
 import com.hongyun.service.TargetService;
+import com.hongyun.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,9 @@ public class TargetServiceImpl implements TargetService {
 
     @Autowired
     private TargetMapper targetMapper;
+
+    @Autowired
+    private DateUtil dateUtil;
 
     @Override
     public int add(Target target) {
