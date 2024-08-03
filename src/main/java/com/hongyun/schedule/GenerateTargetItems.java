@@ -33,8 +33,8 @@ public class GenerateTargetItems {
     @Autowired
     private DateUtil dateUtil;
 
-//    @Scheduled(cron = "0 0 0 * * *") // 每天凌晨零点触发
-    @Scheduled(fixedDelay = 10000)
+    @Scheduled(cron = "0 0 0 * * *") // 每天凌晨零点触发
+//    @Scheduled(fixedDelay = 10000)
     public void generateTargetItems() {
 
         int nowWeekDay = getWeekDay();
