@@ -6,6 +6,7 @@ import com.hongyun.common.ResponseObjectVO;
 import com.hongyun.constants.NormalConstants;
 import com.hongyun.entity.User;
 import com.hongyun.service.UserService;
+import com.hongyun.util.ValidationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StopWatch;
 import org.springframework.util.StringUtils;
@@ -21,11 +22,18 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private ValidationUtil validationUtil;
+
     @PostMapping(value = "/register")
     public ResponseObjectVO<String> register(@RequestBody User user) {
         ResponseObjectVO<String> response = new ResponseObjectVO<>();
         String token = null;
         try {
+            String validMsg = validationUtil.checkRegisterUserParams(user);
+            if(StringUtils.hasLength(validMsg)){
+                return response.getFailResponseVo(validMsg);
+            }
             StopWatch stopWatch = new StopWatch();
             stopWatch.start();
             token = userService.register(user);

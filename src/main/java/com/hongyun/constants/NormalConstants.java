@@ -9,4 +9,8 @@ public class NormalConstants {
     public static String TARGET_ITEM_SUCCESS = "1";
     public static String TARGET_ITEM_FAILED = "0";
     public static String YYYY_MM_DD = "yyyy-MM-dd";
+    public static String NAME = "name";
+    public static String EMAIL = "email";
+    public static String PASSWORD = "password";
+    public static String NULL = "null";
 }

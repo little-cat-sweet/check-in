@@ -2,6 +2,7 @@ package com.hongyun.interceptor;
 
 import com.hongyun.dto.vo.User;
 import com.hongyun.util.UserHolder;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +16,8 @@ public class LoginInterceptor implements HandlerInterceptor {
         User userDto = UserHolder.getUser();
         if(Objects.isNull(userDto)){
             response.setStatus(404);
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.getWriter().write("UnAuthorization");
             return false;
         }
         return true;
