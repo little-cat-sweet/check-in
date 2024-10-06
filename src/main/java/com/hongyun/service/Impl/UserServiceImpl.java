@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public String login(String email, String password) throws Exception {
         User user = userMapper.findByEmail(email);
-        if (! Objects.isNull(user) && passwordUtils.decrypt(user.getPassword()).equals(password)) {
+        if (!Objects.isNull(user) && passwordUtils.decrypt(user.getPassword()).equals(password)) {
             return getTokenAndInitUserInfoInRedis(user);
         }
         return null;
@@ -71,6 +71,7 @@ public class UserServiceImpl implements UserService {
         com.hongyun.dto.vo.User userVo = new com.hongyun.dto.vo.User();
         userVo.setName(user.getName());
         userVo.setEmail(user.getEmail());
+        userVo.setId(user.getId());
         token = UUID.fastUUID().toString(true);
         userVo.setToken(token);
         Map<String, Object> userMap = BeanUtil.beanToMap(userVo, new HashMap<>(), CopyOptions.create().setIgnoreNullValue(true)
@@ -103,7 +104,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean updatePassword(String email, String code, String newPassword) throws Exception {
         String codeFromRedis = stringRedisTemplate.opsForValue().get("email:" + email);
-        if (! StringUtils.hasLength(codeFromRedis) || !codeFromRedis.equals(code)) {
+        if (!StringUtils.hasLength(codeFromRedis) || !codeFromRedis.equals(code)) {
             return false;
         }
         User user = userMapper.findByEmail(email);

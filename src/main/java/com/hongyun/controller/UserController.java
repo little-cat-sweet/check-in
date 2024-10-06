@@ -77,7 +77,7 @@ public class UserController {
             log.error("request code error -> {}", e.getMessage());
             return response.getFailResponseVo(NormalConstants.ERROR_MESSAGE);
         }
-        return response.getSuccess("request success", code);
+        return response.getSuccess("request success", NormalConstants.SUCCESS);
     }
 
     @GetMapping(value = "/updatePassword")

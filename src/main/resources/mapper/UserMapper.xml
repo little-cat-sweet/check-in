@@ -7,7 +7,7 @@
     </select>
 
     <insert id="insert" parameterType="com.hongyun.entity.User">
-        insert into user (name, email, password) values (#{name}, #{email}, #{password});
+        insert into user (name, email, password, create_time, update_time) values (#{name}, #{email}, #{password}, now(), now());
     </insert>
 
 

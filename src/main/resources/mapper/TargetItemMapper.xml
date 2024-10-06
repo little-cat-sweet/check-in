@@ -25,13 +25,13 @@
 
 
     <insert id="addItem" parameterType="com.hongyun.entity.TargetItem">
-        insert into target_item (target_id, user_id, status, create_time) values (#{targetId}, #{userId}, #{status}, #{createTime});
+        insert into target_item (target_id, user_id, status, create_time, update_time) values (#{targetId}, #{userId}, #{status}, now(), now());
     </insert>
 
     <insert id="addItems" parameterType="java.util.List">
         <foreach collection="list" item="item" separator=";">
             INSERT INTO target_item (target_id, user_id, status, create_time)
-            VALUES (#{item.targetId}, #{item.userId}, #{item.status}, #{item.createTime})
+            VALUES (#{item.targetId}, #{item.userId}, #{item.status}, now())
         </foreach>
     </insert>
 </mapper>

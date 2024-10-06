@@ -28,7 +28,7 @@
 
     <update id="updateBy" parameterType="map">
         UPDATE target
-        SET name = #{name}
+        SET name = #{name}, update_time = now()
         WHERE id = #{id}
     </update>
 

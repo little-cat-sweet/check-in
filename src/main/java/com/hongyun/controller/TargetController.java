@@ -6,6 +6,7 @@ import com.hongyun.constants.NormalConstants;
 import com.hongyun.entity.Target;
 import com.hongyun.service.TargetService;
 import com.hongyun.util.DateUtil;
+import com.hongyun.util.UserHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -79,11 +80,11 @@ public class TargetController {
     }
 
     @GetMapping(value = "/findTargets")
-    public ResponseObjectVO<List<Target>> findTargetsByUserId(@RequestParam Integer userId) {
+    public ResponseObjectVO<List<Target>> findTargetsByUserId() {
         ResponseObjectVO<List<Target>> responseObjectVO = new ResponseObjectVO<>();
         List<Target> targets = null;
         try {
-            targets = targetService.findByUserId(userId);
+            targets = targetService.findByUserId(Math.toIntExact(UserHolder.getUser().getId()));
             return responseObjectVO.getSuccess(NormalConstants.SUCCESS, targets);
         } catch (Exception e) {
             log.error("/target/findTargets -> {}", e.getMessage());
