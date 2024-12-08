@@ -20,8 +20,32 @@
         SELECT *
         FROM target_item
         WHERE user_id = #{userId}
-          AND create_time = #{createTime}
+          AND DATE(create_time) = #{createTime}
     </select>
+
+    <resultMap id="showTargetItemMap" type="com.hongyun.dto.vo.TargetItemVo">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="description" column="description"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <select id="showTargetItemVo" resultMap="showTargetItemMap" parameterType="map">
+        SELECT
+            ti.id,
+            t.NAME,
+            t.description,
+            ti.STATUS,
+            ti.create_time
+        FROM
+            target_item AS ti
+                LEFT JOIN target AS t ON t.id = ti.target_id
+        WHERE
+            DATE ( ti.create_time ) = #{createTime}
+          AND ti.user_id = #{userId}
+    </select>
+
 
 
     <insert id="addItem" parameterType="com.hongyun.entity.TargetItem">

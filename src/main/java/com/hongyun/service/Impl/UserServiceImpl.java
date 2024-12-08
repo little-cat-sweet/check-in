@@ -11,6 +11,7 @@ import com.hongyun.mapper.UserMapper;
 import com.hongyun.service.UserService;
 import com.hongyun.util.EmailUtil;
 import com.hongyun.util.PasswordUtils;
+import com.hongyun.util.UserHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -36,7 +37,7 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private PasswordUtils passwordUtils;
-    private Log log = LogFactory.get();
+    private final Log log = LogFactory.get();
 
 
     @Override
