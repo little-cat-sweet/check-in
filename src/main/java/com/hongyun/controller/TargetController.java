@@ -3,6 +3,7 @@ package com.hongyun.controller;
 import cn.hutool.log.Log;
 import com.hongyun.common.ResponseObjectVO;
 import com.hongyun.constants.NormalConstants;
+import com.hongyun.dto.vo.User;
 import com.hongyun.entity.Target;
 import com.hongyun.service.TargetService;
 import com.hongyun.util.DateUtil;
@@ -28,18 +29,14 @@ public class TargetController {
     public ResponseObjectVO<String> addTarget(@RequestBody Target target) {
         Integer res = null;
         ResponseObjectVO<String> responseObjectVO = new ResponseObjectVO<>();
-        try {
-            target.setCreateTime(dateUtil.getYYYY_MM_DD_DateByNow());
-            res = targetService.add(target);
-            if (res > 0) {
-                return responseObjectVO.getSuccessResponseVo(NormalConstants.SUCCESS);
-            } else {
-                return responseObjectVO.getFailResponseVo(NormalConstants.FAILED);
-            }
-        } catch (Exception e) {
-            log.error("/target/add -> {}", e.getMessage());
-            e.printStackTrace();
-            return responseObjectVO.getFailResponseVo(NormalConstants.ERROR_MESSAGE);
+        User user = UserHolder.getUser();
+        target.setUserId(Math.toIntExact(user.getId()));
+        target.setCreateTime(dateUtil.getYYYY_MM_DD_DateByNow());
+        res = targetService.add(target);
+        if (res > 0) {
+            return responseObjectVO.getSuccessResponseVo(NormalConstants.SUCCESS);
+        } else {
+            return responseObjectVO.getFailResponseVo(NormalConstants.FAILED);
         }
     }
 
@@ -47,17 +44,11 @@ public class TargetController {
     public ResponseObjectVO<String> update(@RequestParam String name, @RequestParam Integer id) {
         Integer res = null;
         ResponseObjectVO<String> responseObjectVO = new ResponseObjectVO<>();
-        try {
-            res = targetService.update(name, id);
-            if (res > 0) {
-                return responseObjectVO.getSuccessResponseVo(NormalConstants.SUCCESS);
-            } else {
-                return responseObjectVO.getSuccessResponseVo(NormalConstants.FAILED);
-            }
-        } catch (Exception e) {
-            log.error("/target/update -> {}", e.getMessage());
-            e.printStackTrace();
-            return responseObjectVO.getFailResponseVo(NormalConstants.ERROR_MESSAGE);
+        res = targetService.update(name, id);
+        if (res > 0) {
+            return responseObjectVO.getSuccessResponseVo(NormalConstants.SUCCESS);
+        } else {
+            return responseObjectVO.getSuccessResponseVo(NormalConstants.FAILED);
         }
     }
 
@@ -65,17 +56,11 @@ public class TargetController {
     public ResponseObjectVO<String> delete(@RequestParam Integer id) {
         ResponseObjectVO<String> responseObjectVO = new ResponseObjectVO<>();
         Integer res = null;
-        try {
-            res = targetService.delete(id);
-            if (res > 0) {
-                return responseObjectVO.getSuccessResponseVo(NormalConstants.SUCCESS);
-            } else {
-                return responseObjectVO.getFailResponseVo(NormalConstants.FAILED);
-            }
-        } catch (Exception e) {
-            log.error("/target/delete -> {}", e.getMessage());
-            e.printStackTrace();
-            return responseObjectVO.getFailResponseVo(NormalConstants.ERROR_MESSAGE);
+        res = targetService.delete(id);
+        if (res > 0) {
+            return responseObjectVO.getSuccessResponseVo(NormalConstants.SUCCESS);
+        } else {
+            return responseObjectVO.getFailResponseVo(NormalConstants.FAILED);
         }
     }
 
@@ -83,13 +68,14 @@ public class TargetController {
     public ResponseObjectVO<List<Target>> findTargetsByUserId() {
         ResponseObjectVO<List<Target>> responseObjectVO = new ResponseObjectVO<>();
         List<Target> targets = null;
-        try {
-            targets = targetService.findByUserId(Math.toIntExact(UserHolder.getUser().getId()));
-            return responseObjectVO.getSuccess(NormalConstants.SUCCESS, targets);
-        } catch (Exception e) {
-            log.error("/target/findTargets -> {}", e.getMessage());
-            e.printStackTrace();
-            return responseObjectVO.getFailResponseVo(NormalConstants.FAILED);
-        }
+        targets = targetService.findByUserId(Math.toIntExact(UserHolder.getUser().getId()));
+        return responseObjectVO.getSuccess(NormalConstants.SUCCESS, targets);
+
+    }
+
+    @GetMapping(value = "/test1")
+    public void test1(@RequestParam int number) {
+        int res = 1 / number;
+        System.out.println(res);
     }
 }

@@ -26,41 +26,30 @@ public class UserController {
     private ValidationUtil validationUtil;
 
     @PostMapping(value = "/register")
-    public ResponseObjectVO<String> register(@RequestBody User user) {
+    public ResponseObjectVO<String> register(@RequestBody User user) throws Exception {
         ResponseObjectVO<String> response = new ResponseObjectVO<>();
         String token = null;
-        try {
-            String validMsg = validationUtil.checkRegisterUserParams(user);
-            if(StringUtils.hasLength(validMsg)){
-                return response.getFailResponseVo(validMsg);
-            }
-            StopWatch stopWatch = new StopWatch();
-            stopWatch.start();
-            token = userService.register(user);
-            stopWatch.stop();
-            log.info("/user/register execute time -> {}", stopWatch.getTotalTimeMillis());
-            if (!StringUtils.hasLength(token)) {
-                return response.getFailResponseVo("this account has registered !");
-            }
-        } catch (Exception e) {
-            log.error("register failed -> {}", e.getMessage());
-            return response.getFailResponseVo(NormalConstants.ERROR_MESSAGE);
+        String validMsg = validationUtil.checkRegisterUserParams(user);
+        if (StringUtils.hasLength(validMsg)) {
+            return response.getFailResponseVo(validMsg);
+        }
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        token = userService.register(user);
+        stopWatch.stop();
+        log.info("/user/register execute time -> {}", stopWatch.getTotalTimeMillis());
+        if (!StringUtils.hasLength(token)) {
+            return response.getFailResponseVo("this account has registered !");
         }
         return response.getSuccess("register successfully !", token);
     }
 
     @PostMapping(value = "/login")
-    public ResponseObjectVO<String> login(@RequestParam String email, @RequestParam String password) {
+    public ResponseObjectVO<String> login(@RequestParam String email, @RequestParam String password) throws Exception {
         ResponseObjectVO<String> response = new ResponseObjectVO<>();
         String token = null;
-        try {
-            token = userService.login(email, password);
-            if (Objects.isNull(token)) return response.getFailResponseVo("password is wrong");
-        } catch (Exception e) {
-            log.error("login failed -> {}", e.getMessage());
-            e.printStackTrace();
-            return response.getFailResponseVo("login failed !");
-        }
+        token = userService.login(email, password);
+        if (Objects.isNull(token)) return response.getFailResponseVo("password is wrong");
         return response.getSuccess("login successfully !", token);
     }
 
@@ -68,29 +57,19 @@ public class UserController {
     public ResponseObjectVO<String> requestUpdatePasswordCode(@RequestParam String email) {
         ResponseObjectVO<String> response = new ResponseObjectVO<>();
         String code = null;
-        try {
-            if (userService.checkCodeExisted(email)) {
-                return response.getFailResponseVo("this email update password code has sent to your email, pls try it later. Thanks !");
-            }
-            code = userService.requestUpdatePasswordByEmail(email);
-        } catch (Exception e) {
-            log.error("request code error -> {}", e.getMessage());
-            return response.getFailResponseVo(NormalConstants.ERROR_MESSAGE);
+        if (userService.checkCodeExisted(email)) {
+            return response.getFailResponseVo("this email update password code has sent to your email, pls try it later. Thanks !");
         }
+        code = userService.requestUpdatePasswordByEmail(email);
+        log.info("code -> {}", code);
         return response.getSuccess("request success", NormalConstants.SUCCESS);
     }
 
     @GetMapping(value = "/updatePassword")
-    public ResponseObjectVO<String> updatePassword(@RequestParam String email, @RequestParam String code, @RequestParam String newPassword) {
+    public ResponseObjectVO<String> updatePassword(@RequestParam String email, @RequestParam String code, @RequestParam String newPassword) throws Exception {
         ResponseObjectVO<String> response = new ResponseObjectVO<>();
         Boolean done = null;
-        try {
-            done = userService.updatePassword(email, code, newPassword);
-        } catch (Exception e) {
-            log.error("updatePassword error -> {}", e.getMessage());
-            e.printStackTrace();
-            return response.getFailResponseVo(NormalConstants.ERROR_MESSAGE);
-        }
+        done = userService.updatePassword(email, code, newPassword);
         return done ? response.getSuccessResponseVo("update success") : response.getFailResponseVo("code or email is not valid");
     }
 }

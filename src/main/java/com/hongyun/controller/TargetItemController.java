@@ -26,30 +26,18 @@ public class TargetItemController {
     public ResponseObjectVO confirmSuccess(@RequestParam Integer id) {
         ResponseObjectVO responseObjectVO = new ResponseObjectVO();
         Boolean res = null;
-        try {
-            res = targetItemService.updateStatus(NormalConstants.TARGET_ITEM_SUCCESS, id);
-            if (res) return responseObjectVO.getSuccessResponseVo(NormalConstants.SUCCESS);
-            else return responseObjectVO.getFailResponseVo(NormalConstants.FAILED);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            e.printStackTrace();
-        }
-        return responseObjectVO.getFailResponseVo(NormalConstants.FAILED);
+        res = targetItemService.updateStatus(NormalConstants.TARGET_ITEM_SUCCESS, id);
+        if (res) return responseObjectVO.getSuccessResponseVo(NormalConstants.SUCCESS);
+        else return responseObjectVO.getFailResponseVo(NormalConstants.FAILED);
     }
 
     @PostMapping(value = "/cancel")
     public ResponseObjectVO cancel(@RequestParam Integer id) {
         ResponseObjectVO responseObjectVO = new ResponseObjectVO();
         Boolean res = null;
-        try {
-            res = targetItemService.updateStatus(NormalConstants.TARGET_ITEM_FAILED, id);
-            if (res) return responseObjectVO.getSuccessResponseVo(NormalConstants.SUCCESS);
-            else return responseObjectVO.getFailResponseVo(NormalConstants.FAILED);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            e.printStackTrace();
-        }
-        return responseObjectVO.getFailResponseVo(NormalConstants.FAILED);
+        res = targetItemService.updateStatus(NormalConstants.TARGET_ITEM_FAILED, id);
+        if (res) return responseObjectVO.getSuccessResponseVo(NormalConstants.SUCCESS);
+        else return responseObjectVO.getFailResponseVo(NormalConstants.FAILED);
     }
 
 
@@ -58,44 +46,26 @@ public class TargetItemController {
 
         ResponseObjectVO<List<TargetItem>> response = new ResponseObjectVO<>();
         List<TargetItem> data = null;
-        try {
-            User user = UserHolder.getUser();
-            data = targetItemService.getTargetItems(Math.toIntExact(user.getId()), time);
-            return response.getSuccess(NormalConstants.SUCCESS, data);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            e.printStackTrace();
-        }
-        return response.getFailResponseVo(NormalConstants.FAILED);
+        User user = UserHolder.getUser();
+        data = targetItemService.getTargetItems(Math.toIntExact(user.getId()), time);
+        return response.getSuccess(NormalConstants.SUCCESS, data);
     }
 
     @PostMapping(value = "/addItem")
     public ResponseObjectVO addTargetItem(@RequestBody TargetItem targetItem) {
         ResponseObjectVO response = new ResponseObjectVO();
         Boolean success = null;
-        try {
-            success = targetItemService.addItem(targetItem);
-            if (success) return response.getSuccessResponseVo(NormalConstants.SUCCESS);
-            else response.getFailResponseVo(NormalConstants.FAILED);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            e.printStackTrace();
-        }
-        return response.getFailResponseVo(NormalConstants.ERROR_MESSAGE);
+        success = targetItemService.addItem(targetItem);
+        if (success) return response.getSuccessResponseVo(NormalConstants.SUCCESS);
+        else return response.getFailResponseVo(NormalConstants.FAILED);
     }
 
     @GetMapping(value = "/showTargetItemVo")
-    public ResponseObjectVO<List<TargetItemVo>> showTargetItemVo(@RequestParam String time){
+    public ResponseObjectVO<List<TargetItemVo>> showTargetItemVo(@RequestParam String time) {
         ResponseObjectVO<List<TargetItemVo>> responseObjectVO = new ResponseObjectVO<>();
         List<TargetItemVo> data = new ArrayList<>();
-        try {
-            User user = UserHolder.getUser();
-            data = targetItemService.getTargetItemVos(Math.toIntExact(user.getId()),time.substring(0, 10));
-            return responseObjectVO.getSuccess(NormalConstants.SUCCESS, data);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            e.printStackTrace();
-        }
-        return responseObjectVO.getFailResponseVo(NormalConstants.FAILED);
+        User user = UserHolder.getUser();
+        data = targetItemService.getTargetItemVos(Math.toIntExact(user.getId()), time.substring(0, 10));
+        return responseObjectVO.getSuccess(NormalConstants.SUCCESS, data);
     }
 }
