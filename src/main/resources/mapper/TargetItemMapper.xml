@@ -4,7 +4,8 @@
 
     <update id="updateStatus" parameterType="map">
         UPDATE target_item
-        SET status = #{status}
+        SET status      = #{status},
+            update_time = now()
         WHERE id = #{id}
     </update>
 
@@ -20,7 +21,7 @@
         SELECT *
         FROM target_item
         WHERE user_id = #{userId}
-          AND DATE(create_time) = #{createTime}
+          AND DATE (create_time) = #{createTime}
     </select>
 
     <resultMap id="showTargetItemMap" type="com.hongyun.dto.vo.TargetItemVo">
@@ -32,24 +33,22 @@
     </resultMap>
 
     <select id="showTargetItemVo" resultMap="showTargetItemMap" parameterType="map">
-        SELECT
-            ti.id,
-            t.NAME,
-            t.description,
-            ti.STATUS,
-            ti.create_time
-        FROM
-            target_item AS ti
-                LEFT JOIN target AS t ON t.id = ti.target_id
+        SELECT ti.id,
+               t.NAME,
+               t.description,
+               ti.STATUS,
+               ti.create_time
+        FROM target_item AS ti
+                 LEFT JOIN target AS t ON t.id = ti.target_id
         WHERE
             DATE ( ti.create_time ) = #{createTime}
           AND ti.user_id = #{userId}
     </select>
 
 
-
     <insert id="addItem" parameterType="com.hongyun.entity.TargetItem">
-        insert into target_item (target_id, user_id, status, create_time, update_time) values (#{targetId}, #{userId}, #{status}, now(), now());
+        insert into target_item (target_id, user_id, status, create_time, update_time)
+        values (#{targetId}, #{userId}, #{status}, now(), now());
     </insert>
 
     <insert id="addItems" parameterType="java.util.List">

@@ -1,6 +1,7 @@
 package com.hongyun.controller;
 
 import cn.hutool.log.Log;
+import com.hongyun.common.PageVO;
 import com.hongyun.common.ResponseObjectVO;
 import com.hongyun.constants.NormalConstants;
 import com.hongyun.dto.vo.User;
@@ -11,6 +12,7 @@ import com.hongyun.util.UserHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Iterator;
 import java.util.List;
 
 @RestController
@@ -33,6 +35,7 @@ public class TargetController {
         target.setUserId(Math.toIntExact(user.getId()));
         target.setCreateTime(dateUtil.getYYYY_MM_DD_DateByNow());
         res = targetService.add(target);
+
         if (res > 0) {
             return responseObjectVO.getSuccessResponseVo(NormalConstants.SUCCESS);
         } else {
@@ -65,17 +68,15 @@ public class TargetController {
     }
 
     @GetMapping(value = "/findTargets")
-    public ResponseObjectVO<List<Target>> findTargetsByUserId() {
+    public ResponseObjectVO<List<Target>> findTargetsByUserId(@RequestParam Integer pageNum, @RequestParam Integer pageSize) {
         ResponseObjectVO<List<Target>> responseObjectVO = new ResponseObjectVO<>();
+        PageVO pageVO = new PageVO();
+        pageVO.setPageNum(pageNum);
+        pageVO.setPageSize(pageSize);
         List<Target> targets = null;
-        targets = targetService.findByUserId(Math.toIntExact(UserHolder.getUser().getId()));
+        targets = targetService.findByUserId(Math.toIntExact(UserHolder.getUser().getId()), pageVO);
+        responseObjectVO.setPagination(pageVO);
         return responseObjectVO.getSuccess(NormalConstants.SUCCESS, targets);
 
-    }
-
-    @GetMapping(value = "/test1")
-    public void test1(@RequestParam int number) {
-        int res = 1 / number;
-        System.out.println(res);
     }
 }

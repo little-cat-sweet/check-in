@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hongyun.mapper.TargetMapper">
-    <insert id="addTarget" parameterType="com.hongyun.entity.Target">
+    <insert id="addTarget" parameterType="com.hongyun.entity.Target" useGeneratedKeys="true" keyProperty="id">
         insert into target (user_id, name, description, create_time, day)
         values (#{userId}, #{name}, #{description}, #{createTime}, #{day});
     </insert>
@@ -18,6 +18,13 @@
     <select id="findByUserId" resultMap="targetResultMap" parameterType="map">
         SELECT *
         FROM target
+        WHERE user_id = #{userId} LIMIT #{offset}
+            , #{limit}
+    </select>
+
+    <select id="countByUserId" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM target
         WHERE user_id = #{userId}
     </select>
 
@@ -28,12 +35,20 @@
 
     <update id="updateBy" parameterType="map">
         UPDATE target
-        SET name = #{name}, update_time = now()
+        SET name        = #{name},
+            update_time = now()
         WHERE id = #{id}
     </update>
 
     <delete id="deleteBy" parameterType="map">
-        delete from target where id = #{id}
+        delete
+        from target
+        where id = #{id}
     </delete>
 
+    <select id="findById" resultMap="targetResultMap" parameterType="int">
+        SELECT *
+        FROM target
+        WHERE id = #{id}
+    </select>
 </mapper>
