@@ -1,6 +1,7 @@
 package com.hongyun.controller;
 
 import cn.hutool.log.Log;
+import com.hongyun.common.PageVO;
 import com.hongyun.common.ResponseObjectVO;
 import com.hongyun.constants.NormalConstants;
 import com.hongyun.dto.vo.TargetItemVo;
@@ -61,11 +62,15 @@ public class TargetItemController {
     }
 
     @GetMapping(value = "/showTargetItemVo")
-    public ResponseObjectVO<List<TargetItemVo>> showTargetItemVo(@RequestParam String time) {
+    public ResponseObjectVO<List<TargetItemVo>> showTargetItemVo(@RequestParam Integer pageNum, @RequestParam Integer pageSize, @RequestParam String time) {
         ResponseObjectVO<List<TargetItemVo>> responseObjectVO = new ResponseObjectVO<>();
         List<TargetItemVo> data = new ArrayList<>();
         User user = UserHolder.getUser();
-        data = targetItemService.getTargetItemVos(Math.toIntExact(user.getId()), time.substring(0, 10));
+        PageVO pageVO = new PageVO();
+        pageVO.setPageNum(pageNum);
+        pageVO.setPageSize(pageSize);
+        data = targetItemService.getTargetItemVos(Math.toIntExact(user.getId()), time.substring(0, 10), pageVO);
+        responseObjectVO.setPagination(pageVO);
         return responseObjectVO.getSuccess(NormalConstants.SUCCESS, data);
     }
 }

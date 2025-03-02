@@ -1,6 +1,7 @@
 package com.hongyun.service.Impl;
 
 import cn.hutool.log.Log;
+import com.hongyun.common.PageVO;
 import com.hongyun.dto.vo.TargetItemVo;
 import com.hongyun.entity.TargetItem;
 import com.hongyun.mapper.TargetItemMapper;
@@ -10,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class TargetItemServiceImpl implements TargetItemService {
@@ -43,8 +46,18 @@ public class TargetItemServiceImpl implements TargetItemService {
     }
 
     @Override
-    public List<TargetItemVo> getTargetItemVos(Integer userId, String time) {
+    public List<TargetItemVo> getTargetItemVos(Integer userId, String time, PageVO page) {
         log.info("userId -> {}, time -> {}", userId, time);
-        return targetItemMapper.showTargetItemVo(userId, time);
+        Map<String, Object> params = new HashMap<>();
+        params.put("userId", userId);
+        int offset = (page.getPageNum() - 1) * page.getPageSize();
+        params.put("offset", offset);
+        params.put("limit", page.getPageSize());
+        params.put("createTime", time);
+        params.put("userId", userId);
+        List<TargetItemVo> targetItemVos = targetItemMapper.showTargetItemVo(params);
+        int total = targetItemMapper.getNowTimeTotalTargetItems(params);
+        page.setTotal(total);
+        return targetItemVos;
     }
 }

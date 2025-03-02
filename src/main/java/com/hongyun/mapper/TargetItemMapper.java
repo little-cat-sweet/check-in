@@ -5,6 +5,7 @@ import com.hongyun.entity.TargetItem;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface TargetItemMapper {
@@ -17,5 +18,7 @@ public interface TargetItemMapper {
 
     int addItems(List<TargetItem> targetItems);
 
-    List<TargetItemVo> showTargetItemVo(Integer userId, String createTime);
+    List<TargetItemVo> showTargetItemVo(Map<String, Object> param);
+
+    int getNowTimeTotalTargetItems(Map<String, Object> params);
 }

@@ -1,5 +1,6 @@
 package com.hongyun.service;
 
+import com.hongyun.common.PageVO;
 import com.hongyun.dto.vo.TargetItemVo;
 import com.hongyun.entity.TargetItem;
 
@@ -14,5 +15,5 @@ public interface TargetItemService {
 
     boolean addItem(TargetItem targetItem);
 
-    List<TargetItemVo> getTargetItemVos(Integer userId, String time);
+    List<TargetItemVo> getTargetItemVos(Integer userId, String time, PageVO page);
 }

@@ -42,7 +42,8 @@
                  LEFT JOIN target AS t ON t.id = ti.target_id
         WHERE
             DATE ( ti.create_time ) = #{createTime}
-          AND ti.user_id = #{userId}
+          AND ti.user_id = #{userId} LIMIT #{offset}
+            , #{limit}
     </select>
 
 
@@ -57,4 +58,10 @@
             VALUES (#{item.targetId}, #{item.userId}, #{item.status}, now())
         </foreach>
     </insert>
+
+    <select id="getNowTimeTotalTargetItems" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM target
+        WHERE user_id = #{userId} and DATE (create_time) = #{createTime}
+    </select>
 </mapper>
