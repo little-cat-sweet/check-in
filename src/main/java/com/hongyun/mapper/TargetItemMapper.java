@@ -1,6 +1,7 @@
 package com.hongyun.mapper;
 
 import com.hongyun.dto.vo.TargetItemVo;
+import com.hongyun.entity.DashTargetItem;
 import com.hongyun.entity.TargetItem;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -21,4 +22,6 @@ public interface TargetItemMapper {
     List<TargetItemVo> showTargetItemVo(Map<String, Object> param);
 
     int getNowTimeTotalTargetItems(Map<String, Object> params);
+
+    List<DashTargetItem> getDashTargetItem(Map<String, Object> params);
 }

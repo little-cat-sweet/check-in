@@ -62,6 +62,23 @@
     <select id="getNowTimeTotalTargetItems" parameterType="map" resultType="int">
         SELECT COUNT(*)
         FROM target
-        WHERE user_id = #{userId} and DATE (create_time) = #{createTime}
+        WHERE user_id = #{userId}
+          and DATE (create_time) = #{createTime}
+    </select>
+
+    <resultMap id="dashTargetItemResultMap" type="com.hongyun.entity.DashTargetItem">
+        <result property="name" column="name"/>
+        <result property="description" column="description"/>
+        <result property="createTime" column="create_time"/>
+        <result property="status" column="status"/>
+    </resultMap>
+
+    <select id="getDashTargetItem" parameterType="map" resultMap="dashTargetItemResultMap">
+        SELECT t.name, t.description, ti.create_time, ti.status
+        FROM target_item ti
+                 JOIN target t ON ti.target_id = t.id
+        WHERE ti.user_id = #{userId}
+          AND ti.create_time >= #{fromDate}
+          AND ti.create_time &lt; #{endDate}
     </select>
 </mapper>
