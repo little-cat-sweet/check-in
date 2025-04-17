@@ -67,6 +67,7 @@
     </select>
 
     <resultMap id="dashTargetItemResultMap" type="com.hongyun.entity.DashTargetItem">
+        <result property="id" column="id"/>
         <result property="name" column="name"/>
         <result property="description" column="description"/>
         <result property="createTime" column="create_time"/>
@@ -74,9 +75,9 @@
     </resultMap>
 
     <select id="getDashTargetItem" parameterType="map" resultMap="dashTargetItemResultMap">
-        SELECT t.name, t.description, ti.create_time, ti.status
-        FROM target_item ti
-                 JOIN target t ON ti.target_id = t.id
+        SELECT ti.id, t.name, t.description, ti.create_time, ti.status
+        FROM target t
+                 left JOIN target_item ti ON ti.target_id = t.id
         WHERE ti.user_id = #{userId}
           AND ti.create_time >= #{fromDate}
           AND ti.create_time &lt; #{endDate}

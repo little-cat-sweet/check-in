@@ -1,5 +1,6 @@
 package com.hongyun.service.Impl;
 
+import com.hongyun.common.Constant;
 import com.hongyun.common.ResponseObjectVO;
 import com.hongyun.entity.DashTargetItem;
 import com.hongyun.entity.TargetItem;
@@ -37,6 +38,7 @@ public class DashBoardServiceImpl implements DashBoardService {
         List<DashTargetItem> data = targetItemMapper.getDashTargetItem(params);
 
         ResponseObjectVO<List<DashTargetItem>> res = new ResponseObjectVO<>();
+        res = res.getSuccessResponseVo(Constant.SUCCESS);
         res.setData(data);
         return res;
     }
