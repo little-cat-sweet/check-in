@@ -1,6 +1,7 @@
 package com.hongyun.controller;
 
 import cn.hutool.log.Log;
+import com.hongyun.annotation.TimeLog;
 import com.hongyun.common.PageVO;
 import com.hongyun.common.ResponseObjectVO;
 import com.hongyun.constants.NormalConstants;
@@ -12,9 +13,9 @@ import com.hongyun.util.UserHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Iterator;
 import java.util.List;
 
+@TimeLog
 @RestController
 @RequestMapping(value = "/target")
 public class TargetController {
@@ -28,6 +29,7 @@ public class TargetController {
     private DateUtil dateUtil;
 
     @PostMapping(value = "/add")
+    @TimeLog(value = "add target")
     public ResponseObjectVO<String> addTarget(@RequestBody Target target) {
         Integer res = null;
         ResponseObjectVO<String> responseObjectVO = new ResponseObjectVO<>();

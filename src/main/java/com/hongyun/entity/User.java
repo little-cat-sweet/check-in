@@ -11,7 +11,7 @@ public class User {
     private String name;
     private String email;
     private String password;
-    private String headImage;
+    private byte[] headImage;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
 }

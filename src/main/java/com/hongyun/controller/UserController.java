@@ -8,9 +8,9 @@ import com.hongyun.entity.User;
 import com.hongyun.service.UserService;
 import com.hongyun.util.ValidationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StopWatch;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Objects;
 
@@ -26,18 +26,34 @@ public class UserController {
     private ValidationUtil validationUtil;
 
     @PostMapping(value = "/register")
-    public ResponseObjectVO<String> register(@RequestBody User user) throws Exception {
+    public ResponseObjectVO<String> register(
+            @RequestParam String name,
+            @RequestParam String email,
+            @RequestParam String password,
+            @RequestParam(required = false) MultipartFile headImage) throws Exception {
+
         ResponseObjectVO<String> response = new ResponseObjectVO<>();
-        String token = null;
-        String validMsg = validationUtil.checkRegisterUserParams(user);
-        if (StringUtils.hasLength(validMsg)) {
-            return response.getFailResponseVo(validMsg);
+
+        if (!StringUtils.hasLength(name)) {
+            return response.getFailResponseVo("name is required");
         }
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start();
-        token = userService.register(user);
-        stopWatch.stop();
-        log.info("/user/register execute time -> {}", stopWatch.getTotalTimeMillis());
+        if (!StringUtils.hasLength(email)) {
+            return response.getFailResponseVo("email is required");
+        }
+        if (!StringUtils.hasLength(password)) {
+            return response.getFailResponseVo("password is required");
+        }
+
+        User user = new User();
+        user.setName(name);
+        user.setEmail(email);
+        user.setPassword(password);
+
+        if (headImage != null && !headImage.isEmpty()) {
+            user.setHeadImage(headImage.getBytes());
+        }
+
+        String token = userService.register(user);
         if (!StringUtils.hasLength(token)) {
             return response.getFailResponseVo("this account has registered !");
         }
