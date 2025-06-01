@@ -20,6 +20,7 @@ public class RefreshTokenInterceptor implements HandlerInterceptor {
 
     private final Log log = LogFactory.get();
     StringRedisTemplate stringRedisTemplate = null;
+
     public RefreshTokenInterceptor(StringRedisTemplate stringRedisTemplate) {
         this.stringRedisTemplate = stringRedisTemplate;
     }
@@ -28,34 +29,30 @@ public class RefreshTokenInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         String token = request.getHeader(NormalConstants.AUTH);
-        if(! StringUtils.hasLength(token)) {
+        if (!StringUtils.hasLength(token)) {
             return true;
         }
-        log.info("pass not put token");
 
         Map<Object, Object> userMap = stringRedisTemplate.opsForHash().entries(RedisConstants.LOGIN_CODE_TOKEN + token);
-        log.info("token key -> {}", (RedisConstants.LOGIN_CODE_TOKEN + token));
-        if(userMap.isEmpty()){
+        if (userMap.isEmpty()) {
             return true;
         }
-        log.info("pass user existed in redis");
 
         User userDto = BeanUtil.fillBeanWithMap(userMap, new User(), false);
 
         UserHolder.setUser(userDto);
-        log.info("set user -> {}", UserHolder.getUser());
 
         flushTTL(RedisConstants.LOGIN_CODE_TOKEN + token);
 
         return true;
     }
 
-    private void flushTTL(String token){
+    private void flushTTL(String token) {
         stringRedisTemplate.expire(token, Duration.ofHours(2));
     }
+
     @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        log.info("fresh remove user -> {}", UserHolder.getUser());
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         UserHolder.removeUser();
     }
 }

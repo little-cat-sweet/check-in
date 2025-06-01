@@ -1,6 +1,5 @@
 package com.hongyun.interceptor;
 
-import cn.hutool.log.Log;
 import com.hongyun.dto.vo.User;
 import com.hongyun.util.UserHolder;
 import org.springframework.http.HttpStatus;
@@ -11,12 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Objects;
 
 public class LoginInterceptor implements HandlerInterceptor {
-    private final Log log = Log.get();
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         User userDto = UserHolder.getUser();
-        log.info("user dto -> {}", UserHolder.getUser());
         if(Objects.isNull(userDto)){
             response.setStatus(404);
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
