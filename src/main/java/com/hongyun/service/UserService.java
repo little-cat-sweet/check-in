@@ -13,4 +13,6 @@ public interface UserService {
     boolean checkCodeExisted(String email);
 
     boolean updatePassword(String email, String code, String newPassword) throws Exception;
+
+    byte[] getAvatar();
 }

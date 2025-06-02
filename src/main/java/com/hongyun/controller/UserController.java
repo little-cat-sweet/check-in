@@ -2,16 +2,20 @@ package com.hongyun.controller;
 
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
+import com.hongyun.common.Constant;
 import com.hongyun.common.ResponseObjectVO;
 import com.hongyun.constants.NormalConstants;
+import com.hongyun.dto.Avatar;
 import com.hongyun.entity.User;
 import com.hongyun.service.UserService;
 import com.hongyun.util.ValidationUtil;
+import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Base64;
 import java.util.Objects;
 
 @RestController
@@ -81,11 +85,22 @@ public class UserController {
         return response.getSuccess("request success", NormalConstants.SUCCESS);
     }
 
-    @GetMapping(value = "/updatePassword")
-    public ResponseObjectVO<String> updatePassword(@RequestParam String email, @RequestParam String code, @RequestParam String newPassword) throws Exception {
-        ResponseObjectVO<String> response = new ResponseObjectVO<>();
-        Boolean done = null;
-        done = userService.updatePassword(email, code, newPassword);
-        return done ? response.getSuccessResponseVo("update success") : response.getFailResponseVo("code or email is not valid");
+    @GetMapping("/avatar")
+    public ResponseObjectVO<Avatar> getAvatarBase64() {
+        ResponseObjectVO<Avatar> response = new ResponseObjectVO<>();
+        byte[] avatar = userService.getAvatar();
+        String mimeType = detectMimeType(avatar);
+        String base64 = Base64.getEncoder().encodeToString(avatar);
+
+        Avatar res = new Avatar();
+        res.setBase64(base64);
+        res.setMimeType(mimeType);
+
+        return response.getSuccess(Constant.SUCCESS, res);
+    }
+
+    private String detectMimeType(byte[] bytes) {
+        Tika tika = new Tika();
+        return tika.detect(bytes);
     }
 }

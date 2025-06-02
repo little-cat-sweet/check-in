@@ -1,8 +1,6 @@
 package com.hongyun.interceptor;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.log.Log;
-import cn.hutool.log.LogFactory;
 import com.hongyun.constants.NormalConstants;
 import com.hongyun.constants.RedisConstants;
 import com.hongyun.dto.vo.User;
@@ -18,7 +16,6 @@ import java.util.Map;
 
 public class RefreshTokenInterceptor implements HandlerInterceptor {
 
-    private final Log log = LogFactory.get();
     StringRedisTemplate stringRedisTemplate = null;
     public RefreshTokenInterceptor(StringRedisTemplate stringRedisTemplate) {
         this.stringRedisTemplate = stringRedisTemplate;
@@ -31,19 +28,15 @@ public class RefreshTokenInterceptor implements HandlerInterceptor {
         if(! StringUtils.hasLength(token)) {
             return true;
         }
-        log.info("pass not put token");
 
         Map<Object, Object> userMap = stringRedisTemplate.opsForHash().entries(RedisConstants.LOGIN_CODE_TOKEN + token);
-        log.info("token key -> {}", (RedisConstants.LOGIN_CODE_TOKEN + token));
         if(userMap.isEmpty()){
             return true;
         }
-        log.info("pass user existed in redis");
 
         User userDto = BeanUtil.fillBeanWithMap(userMap, new User(), false);
 
         UserHolder.setUser(userDto);
-        log.info("set user -> {}", UserHolder.getUser());
 
         flushTTL(RedisConstants.LOGIN_CODE_TOKEN + token);
 
@@ -55,7 +48,6 @@ public class RefreshTokenInterceptor implements HandlerInterceptor {
     }
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        log.info("fresh remove user -> {}", UserHolder.getUser());
         UserHolder.removeUser();
     }
 }

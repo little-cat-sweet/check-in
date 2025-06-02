@@ -16,7 +16,6 @@ public class LoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         User userDto = UserHolder.getUser();
-        log.info("user dto -> {}", UserHolder.getUser());
         if(Objects.isNull(userDto)){
             response.setStatus(404);
             response.setStatus(HttpStatus.UNAUTHORIZED.value());

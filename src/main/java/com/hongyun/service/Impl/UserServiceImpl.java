@@ -116,4 +116,11 @@ public class UserServiceImpl implements UserService {
         }
         return false;
     }
+
+    @Override
+    public byte[] getAvatar() {
+        com.hongyun.dto.vo.User userInfo = UserHolder.getUser();
+        User user = userMapper.findByEmail(userInfo.getEmail());
+        return user.getHeadImage();
+    }
 }
