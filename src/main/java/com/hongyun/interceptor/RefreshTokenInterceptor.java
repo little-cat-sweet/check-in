@@ -1,8 +1,6 @@
 package com.hongyun.interceptor;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.log.Log;
-import cn.hutool.log.LogFactory;
 import com.hongyun.constants.NormalConstants;
 import com.hongyun.constants.RedisConstants;
 import com.hongyun.dto.vo.User;
@@ -18,9 +16,7 @@ import java.util.Map;
 
 public class RefreshTokenInterceptor implements HandlerInterceptor {
 
-    private final Log log = LogFactory.get();
     StringRedisTemplate stringRedisTemplate = null;
-
     public RefreshTokenInterceptor(StringRedisTemplate stringRedisTemplate) {
         this.stringRedisTemplate = stringRedisTemplate;
     }
@@ -29,12 +25,12 @@ public class RefreshTokenInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         String token = request.getHeader(NormalConstants.AUTH);
-        if (!StringUtils.hasLength(token)) {
+        if(! StringUtils.hasLength(token)) {
             return true;
         }
 
         Map<Object, Object> userMap = stringRedisTemplate.opsForHash().entries(RedisConstants.LOGIN_CODE_TOKEN + token);
-        if (userMap.isEmpty()) {
+        if(userMap.isEmpty()){
             return true;
         }
 
@@ -47,12 +43,11 @@ public class RefreshTokenInterceptor implements HandlerInterceptor {
         return true;
     }
 
-    private void flushTTL(String token) {
+    private void flushTTL(String token){
         stringRedisTemplate.expire(token, Duration.ofHours(2));
     }
-
     @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         UserHolder.removeUser();
     }
 }
