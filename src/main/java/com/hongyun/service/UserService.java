@@ -15,4 +15,8 @@ public interface UserService {
     boolean updatePassword(String email, String code, String newPassword) throws Exception;
 
     byte[] getAvatar();
+
+    User getUserInfo();
+
+    boolean update(User user);
 }

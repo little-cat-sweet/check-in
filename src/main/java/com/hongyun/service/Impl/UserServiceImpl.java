@@ -123,4 +123,15 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.findByEmail(userInfo.getEmail());
         return user.getHeadImage();
     }
+
+    @Override
+    public User getUserInfo() {
+        com.hongyun.dto.vo.User userInfo = UserHolder.getUser();
+        return userMapper.findByEmail(userInfo.getEmail());
+    }
+
+    @Override
+    public boolean update(User user) {
+        return userMapper.updateUserInfo(user) > 0;
+    }
 }

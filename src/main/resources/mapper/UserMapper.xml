@@ -19,4 +19,18 @@
         update user set password = #{password} where email = #{email}
     </update>
 
+    <update id="updateUserInfo" parameterType="com.hongyun.entity.User">
+        UPDATE user
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="headImage != null">
+                head_image = #{headImage},
+            </if>
+            update_time = now()
+        </set>
+        WHERE email = #{email}
+    </update>
+
 </mapper>

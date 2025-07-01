@@ -8,6 +8,7 @@ import com.hongyun.constants.NormalConstants;
 import com.hongyun.dto.Avatar;
 import com.hongyun.entity.User;
 import com.hongyun.service.UserService;
+import com.hongyun.util.UserHolder;
 import com.hongyun.util.ValidationUtil;
 import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Base64;
 import java.util.Objects;
 
@@ -102,5 +104,28 @@ public class UserController {
     private String detectMimeType(byte[] bytes) {
         Tika tika = new Tika();
         return tika.detect(bytes);
+    }
+
+    @GetMapping(value = "/userInfo")
+    public ResponseObjectVO<User> getUserInfo() {
+        ResponseObjectVO<User> response = new ResponseObjectVO<>();
+
+        return response.getSuccess(Constant.SUCCESS, userService.getUserInfo());
+    }
+
+
+    @PostMapping(value = "/update")
+    public ResponseObjectVO<Boolean> update(@RequestParam String name,
+                                            @RequestParam String email,
+                                            @RequestParam(required = false) MultipartFile headImage) throws IOException {
+
+        ResponseObjectVO<Boolean> responseObjectVO = new ResponseObjectVO<>();
+        User user = new User();
+        user.setName(name);
+        user.setEmail(email);
+        if (headImage != null && !headImage.isEmpty()) {
+            user.setHeadImage(headImage.getBytes());
+        }
+        return responseObjectVO.getSuccess(Constant.SUCCESS, userService.update(user));
     }
 }
