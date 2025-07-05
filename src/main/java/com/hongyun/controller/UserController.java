@@ -91,6 +91,9 @@ public class UserController {
     public ResponseObjectVO<Avatar> getAvatarBase64() {
         ResponseObjectVO<Avatar> response = new ResponseObjectVO<>();
         byte[] avatar = userService.getAvatar();
+        if (null == avatar) {
+            return response.getFailResponseVo("no head photo");
+        }
         String mimeType = detectMimeType(avatar);
         String base64 = Base64.getEncoder().encodeToString(avatar);
 
