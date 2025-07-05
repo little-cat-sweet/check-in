@@ -124,6 +124,7 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                    <finalName>check-in</finalName>
                 </configuration>
             </plugin>
         </plugins>
