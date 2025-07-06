@@ -11,6 +11,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
 
@@ -18,12 +21,24 @@ public class MvcConfig implements WebMvcConfigurer {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
-    @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LoginInterceptor()).excludePathPatterns("/user/register", "/user/login", "/user/code", "/user/updatePassword").order(1);
-        registry.addInterceptor(new RefreshTokenInterceptor(stringRedisTemplate)).addPathPatterns("/**").order(0);
-    }
+        List<String> excludePaths = Arrays.asList(
+                "/user/register",
+                "/user/login",
+                "/user/code",
+                "/user/updatePassword",
+                "/health/test"
+        );
 
+        registry.addInterceptor(new LoginInterceptor())
+                .excludePathPatterns(excludePaths)
+                .order(1);
+
+        registry.addInterceptor(new RefreshTokenInterceptor(stringRedisTemplate))
+                .addPathPatterns("/**")
+                .excludePathPatterns(excludePaths)
+                .order(0);
+    }
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(); // 使用 BCryptPasswordEncoder
