@@ -1,6 +1,5 @@
 server:
   port: 8080
-
 # application.yml 文件中的配置
 spring:
   datasource:
