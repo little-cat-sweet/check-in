@@ -86,6 +86,13 @@ public class UserController {
         log.info("code -> {}", code);
         return response.getSuccess("request success", NormalConstants.SUCCESS);
     }
+    @GetMapping(value = "/updatePassword")
+    public ResponseObjectVO<String> updatePassword(@RequestParam String email, @RequestParam String code, @RequestParam String newPassword) throws Exception {
+        ResponseObjectVO<String> response = new ResponseObjectVO<>();
+        Boolean done = null;
+        done = userService.updatePassword(email, code, newPassword);
+        return done ? response.getSuccessResponseVo("update success") : response.getFailResponseVo("code or email is not valid");
+    }
 
     @GetMapping("/avatar")
     public ResponseObjectVO<Avatar> getAvatarBase64() {

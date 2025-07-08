@@ -41,6 +41,6 @@ public class MvcConfig implements WebMvcConfigurer {
     }
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // 使用 BCryptPasswordEncoder
+        return new BCryptPasswordEncoder();
     }
 }

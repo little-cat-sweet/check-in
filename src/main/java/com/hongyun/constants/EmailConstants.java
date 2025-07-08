@@ -10,7 +10,10 @@ import org.springframework.stereotype.Component;
 public class EmailConstants {
 
     private String host;
+    private Integer port;
     private String from;
     private String user;
     private String passcode;
+    private Boolean sslEnable;
+    private String socketFactoryClass;
 }

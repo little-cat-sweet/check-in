@@ -49,6 +49,9 @@ mybatis:
 
 email:
   host: smtp.qq.com
+  port: 465
   from: 851891179@qq.com
-  user: Mark
+  user: 851891179@qq.com
   passcode: ktyfuelwoypibcfc
+  sslEnable: true
+  socketFactoryClass: javax.net.ssl.SSLSocketFactory
