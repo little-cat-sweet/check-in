@@ -55,3 +55,7 @@ email:
   passcode: ktyfuelwoypibcfc
   sslEnable: true
   socketFactoryClass: javax.net.ssl.SSLSocketFactory
+
+schedule:
+  generate-target:
+    cron: "0 0 0 * * *"

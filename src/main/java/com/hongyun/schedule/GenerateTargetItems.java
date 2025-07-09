@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,8 +32,7 @@ public class GenerateTargetItems {
     @Autowired
     private DateUtil dateUtil;
 
-    @Scheduled(cron = "0 0 0 * * *") // 每天凌晨零点触发
-//    @Scheduled(fixedDelay = 10000)
+    @Scheduled(cron = "${schedule.generate-target.cron}")
     public void generateTargetItems() {
 
         int nowWeekDay = getWeekDay();
@@ -47,6 +45,7 @@ public class GenerateTargetItems {
                     targetItem.setTargetId(target.getId());
                     targetItem.setCreateTime(dateUtil.getYYYY_MM_DD_DateByNow());
                     targetItem.setUserId(target.getUserId());
+                    targetItem.setStatus(0);
                     return targetItem;
                 })
                 .collect(Collectors.toList());

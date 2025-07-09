@@ -12,6 +12,7 @@ import com.hongyun.util.UserHolder;
 import com.hongyun.util.ValidationUtil;
 import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,12 +32,15 @@ public class UserController {
     @Autowired
     private ValidationUtil validationUtil;
 
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+
     @PostMapping(value = "/register")
     public ResponseObjectVO<String> register(
             @RequestParam String name,
             @RequestParam String email,
             @RequestParam String password,
-            @RequestParam(required = false) MultipartFile headImage) throws Exception {
+            @RequestParam String code) throws Exception {
 
         ResponseObjectVO<String> response = new ResponseObjectVO<>();
 
@@ -50,14 +54,15 @@ public class UserController {
             return response.getFailResponseVo("password is required");
         }
 
+        String codeFromRedis = stringRedisTemplate.opsForValue().get("email:" + email);
+        if (!StringUtils.hasLength(codeFromRedis) || !codeFromRedis.equals(code)) {
+            return response.getFailResponseVo("code 不正确或者已过期，请重试！");
+        }
+
         User user = new User();
         user.setName(name);
         user.setEmail(email);
         user.setPassword(password);
-
-        if (headImage != null && !headImage.isEmpty()) {
-            user.setHeadImage(headImage.getBytes());
-        }
 
         String token = userService.register(user);
         if (!StringUtils.hasLength(token)) {
@@ -80,7 +85,7 @@ public class UserController {
         ResponseObjectVO<String> response = new ResponseObjectVO<>();
         String code = null;
         if (userService.checkCodeExisted(email)) {
-            return response.getFailResponseVo("this email update password code has sent to your email, pls try it later. Thanks !");
+            return response.getFailResponseVo("code 已经发送到您的邮箱，请查看重试，谢谢 !");
         }
         code = userService.requestUpdatePasswordByEmail(email);
         log.info("code -> {}", code);
