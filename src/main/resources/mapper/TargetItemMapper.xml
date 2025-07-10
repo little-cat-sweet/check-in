@@ -83,4 +83,9 @@
           AND ti.create_time >= #{fromDate}
           AND ti.create_time &lt; #{endDate}
     </select>
+
+    <delete id="deleteByTargetId" parameterType="java.lang.Integer">
+        DELETE FROM target_item
+        WHERE target_id = #{targetId}
+    </delete>
 </mapper>
