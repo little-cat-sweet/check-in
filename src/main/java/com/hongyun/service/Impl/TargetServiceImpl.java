@@ -42,9 +42,12 @@ public class TargetServiceImpl implements TargetService {
 
         int id = target.getId();
         log.info("added target -> {}", target);
-        targetItem.setTargetId(id);
-        targetItem.setUserId(target.getUserId());
-        targetItemService.addItem(targetItem);
+        int currentWeekDay = dateUtil.getCurrentWeekDay();
+        if(target.getDay() == 0 || currentWeekDay == target.getDay()){
+            targetItem.setTargetId(id);
+            targetItem.setUserId(target.getUserId());
+            targetItemService.addItem(targetItem);
+        }
         return 1;
     }
 
