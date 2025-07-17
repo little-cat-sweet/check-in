@@ -39,7 +39,7 @@ public class EmailUtil {
                 + "<p>该验证码将在5分钟内有效，请勿将其分享给他人。</p>"
                 + "<p>如果您未请求验证码，请忽略此邮件。</p>"
                 + "<p>祝您生活愉快！</p>"
-                + "<p>此致，<br>您的团队</p>"
+                + "<p>此致，<br>打卡小工具团队</p>"
                 + "</div>"
                 + "<div style='background-color: #f1f1f1; text-align: center; padding: 10px; font-size: 12px; color: #888;'>"
                 + "&copy; 2025 打卡小工具. 保留所有权利。"
