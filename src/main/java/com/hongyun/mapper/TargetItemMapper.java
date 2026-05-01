@@ -24,4 +24,6 @@ public interface TargetItemMapper {
     int getNowTimeTotalTargetItems(Map<String, Object> params);
 
     List<DashTargetItem> getDashTargetItem(Map<String, Object> params);
+
+    int deleteByTargetId(Integer targetId);
 }

@@ -4,12 +4,14 @@ import cn.hutool.log.Log;
 import com.hongyun.common.PageVO;
 import com.hongyun.entity.Target;
 import com.hongyun.entity.TargetItem;
+import com.hongyun.mapper.TargetItemMapper;
 import com.hongyun.mapper.TargetMapper;
 import com.hongyun.service.TargetItemService;
 import com.hongyun.service.TargetService;
 import com.hongyun.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +24,9 @@ public class TargetServiceImpl implements TargetService {
 
     @Autowired
     private TargetMapper targetMapper;
+
+    @Autowired
+    private TargetItemMapper targetItemMapper;
 
     @Autowired
     private DateUtil dateUtil;
@@ -37,9 +42,12 @@ public class TargetServiceImpl implements TargetService {
 
         int id = target.getId();
         log.info("added target -> {}", target);
-        targetItem.setTargetId(id);
-        targetItem.setUserId(target.getUserId());
-        targetItemService.addItem(targetItem);
+        int currentWeekDay = dateUtil.getCurrentWeekDay();
+        if(target.getDay() == 0 || currentWeekDay == target.getDay()){
+            targetItem.setTargetId(id);
+            targetItem.setUserId(target.getUserId());
+            targetItemService.addItem(targetItem);
+        }
         return 1;
     }
 
@@ -63,7 +71,9 @@ public class TargetServiceImpl implements TargetService {
     }
 
     @Override
+    @Transactional
     public int delete(Integer id) {
+        targetItemMapper.deleteByTargetId(id);
         return targetMapper.deleteBy(id);
     }
 }
