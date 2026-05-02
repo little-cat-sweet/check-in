@@ -45,6 +45,7 @@ jobs:
               --name check-backend \
               --network check-in \
               --restart always \
+              -e TZ=Asia/Shanghai \
               ccr.ccs.tencentyun.com/mark-chen/check-backend:latest
 
             echo "✅ 后端部署成功！"
