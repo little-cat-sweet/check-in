@@ -8,21 +8,24 @@ import com.hongyun.constants.NormalConstants;
 import com.hongyun.dto.Avatar;
 import com.hongyun.entity.User;
 import com.hongyun.service.UserService;
-import com.hongyun.util.UserHolder;
 import com.hongyun.util.ValidationUtil;
 import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.Objects;
 
 @RestController
 @RequestMapping(value = "/user")
+@Validated
 public class UserController {
     private final Log log = LogFactory.get();
 
@@ -37,22 +40,25 @@ public class UserController {
 
     @PostMapping(value = "/register")
     public ResponseObjectVO<String> register(
-            @RequestParam String name,
-            @RequestParam String email,
-            @RequestParam String password,
-            @RequestParam String code) throws Exception {
+            @RequestParam
+            @NotBlank(message = "用户名不能为空")
+            @Size(max = 30, message = "用户名长度不能超过30个字符")
+            String name,
+            @RequestParam
+            @NotBlank(message = "邮箱不能为空")
+            @Size(max = 30, message = "邮箱长度不能超过30个字符")
+            String email,
+            @RequestParam
+            @NotBlank(message = "密码不能为空")
+            @Size(max = 30, message = "密码长度不能超过30个字符")
+            String password,
+            @RequestParam
+            @NotBlank(message = "验证码不能为空")
+            @Size(max = 30, message = "验证码长度不能超过30个字符")
+            String code
+    ) throws Exception {
 
         ResponseObjectVO<String> response = new ResponseObjectVO<>();
-
-        if (!StringUtils.hasLength(name)) {
-            return response.getFailResponseVo("name is required");
-        }
-        if (!StringUtils.hasLength(email)) {
-            return response.getFailResponseVo("email is required");
-        }
-        if (!StringUtils.hasLength(password)) {
-            return response.getFailResponseVo("password is required");
-        }
 
         String codeFromRedis = stringRedisTemplate.opsForValue().get("email:" + email);
         if (!StringUtils.hasLength(codeFromRedis) || !codeFromRedis.equals(code)) {
@@ -72,30 +78,55 @@ public class UserController {
     }
 
     @PostMapping(value = "/login")
-    public ResponseObjectVO<String> login(@RequestParam String email, @RequestParam String password) throws Exception {
+    public ResponseObjectVO<String> login(
+            @RequestParam
+            @NotBlank(message = "邮箱不能为空")
+            @Size(max = 30, message = "邮箱长度不能超过30个字符")
+            String email,
+            @RequestParam
+            @NotBlank(message = "密码不能为空")
+            @Size(max = 30, message = "密码长度不能超过30个字符")
+            String password
+    ) throws Exception {
         ResponseObjectVO<String> response = new ResponseObjectVO<>();
-        String token = null;
-        token = userService.login(email, password);
+        String token = userService.login(email, password);
         if (Objects.isNull(token)) return response.getFailResponseVo("password is wrong");
         return response.getSuccess("login successfully !", token);
     }
 
     @GetMapping(value = "/code")
-    public ResponseObjectVO<String> requestUpdatePasswordCode(@RequestParam String email) {
+    public ResponseObjectVO<String> requestUpdatePasswordCode(
+            @RequestParam
+            @NotBlank(message = "邮箱不能为空")
+            @Size(max = 30, message = "邮箱长度不能超过30个字符")
+            String email
+    ) {
         ResponseObjectVO<String> response = new ResponseObjectVO<>();
-        String code = null;
         if (userService.checkCodeExisted(email)) {
             return response.getFailResponseVo("code 已经发送到您的邮箱，请查看重试，谢谢 !");
         }
-        code = userService.requestUpdatePasswordByEmail(email);
+        String code = userService.requestUpdatePasswordByEmail(email);
         log.info("code -> {}", code);
         return response.getSuccess("request success", NormalConstants.SUCCESS);
     }
+
     @GetMapping(value = "/updatePassword")
-    public ResponseObjectVO<String> updatePassword(@RequestParam String email, @RequestParam String code, @RequestParam String newPassword) throws Exception {
+    public ResponseObjectVO<String> updatePassword(
+            @RequestParam
+            @NotBlank(message = "邮箱不能为空")
+            @Size(max = 30, message = "邮箱长度不能超过30个字符")
+            String email,
+            @RequestParam
+            @NotBlank(message = "验证码不能为空")
+            @Size(max = 30, message = "验证码长度不能超过30个字符")
+            String code,
+            @RequestParam
+            @NotBlank(message = "新密码不能为空")
+            @Size(max = 30, message = "新密码长度不能超过30个字符")
+            String newPassword
+    ) throws Exception {
         ResponseObjectVO<String> response = new ResponseObjectVO<>();
-        Boolean done = null;
-        done = userService.updatePassword(email, code, newPassword);
+        Boolean done = userService.updatePassword(email, code, newPassword);
         return done ? response.getSuccessResponseVo("update success") : response.getFailResponseVo("code or email is not valid");
     }
 
@@ -124,15 +155,21 @@ public class UserController {
     @GetMapping(value = "/userInfo")
     public ResponseObjectVO<User> getUserInfo() {
         ResponseObjectVO<User> response = new ResponseObjectVO<>();
-
         return response.getSuccess(Constant.SUCCESS, userService.getUserInfo());
     }
 
-
     @PostMapping(value = "/update")
-    public ResponseObjectVO<Boolean> update(@RequestParam String name,
-                                            @RequestParam String email,
-                                            @RequestParam(required = false) MultipartFile headImage) throws IOException {
+    public ResponseObjectVO<Boolean> update(
+            @RequestParam
+            @NotBlank(message = "用户名不能为空")
+            @Size(max = 30, message = "用户名长度不能超过30个字符")
+            String name,
+            @RequestParam
+            @NotBlank(message = "邮箱不能为空")
+            @Size(max = 30, message = "邮箱长度不能超过30个字符")
+            String email,
+            @RequestParam(required = false) MultipartFile headImage
+    ) throws IOException {
 
         ResponseObjectVO<Boolean> responseObjectVO = new ResponseObjectVO<>();
         User user = new User();
