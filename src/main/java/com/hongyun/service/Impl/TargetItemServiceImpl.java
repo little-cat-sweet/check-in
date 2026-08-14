@@ -41,6 +41,7 @@ public class TargetItemServiceImpl implements TargetItemService {
     @Override
     public boolean addItem(TargetItem targetItem) {
         targetItem.setCreateTime(dateUtil.getYYYY_MM_DD_DateByNow());
+        log.info("add target_item -> {}", targetItem);
         int res = targetItemMapper.addItem(targetItem);
         return res == 1;
     }
