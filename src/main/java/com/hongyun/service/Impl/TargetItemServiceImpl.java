@@ -41,7 +41,6 @@ public class TargetItemServiceImpl implements TargetItemService {
     @Override
     public boolean addItem(TargetItem targetItem) {
         targetItem.setCreateTime(dateUtil.getYYYY_MM_DD_DateByNow());
-        log.info("add target_item -> {}", targetItem);
         int res = targetItemMapper.addItem(targetItem);
         return res == 1;
     }
@@ -54,8 +53,7 @@ public class TargetItemServiceImpl implements TargetItemService {
         int offset = (page.getPageNum() - 1) * page.getPageSize();
         params.put("offset", offset);
         params.put("limit", page.getPageSize());
-        params.put("createTime", time);
-        params.put("userId", userId);
+        params.put("createTime", time.substring(0, 10));
         List<TargetItemVo> targetItemVos = targetItemMapper.showTargetItemVo(params);
         int total = targetItemMapper.getNowTimeTotalTargetItems(params);
         page.setTotal(total);

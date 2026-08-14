@@ -21,7 +21,7 @@
         SELECT *
         FROM target_item
         WHERE user_id = #{userId}
-          AND DATE (create_time) = #{createTime}
+          AND DATE_FORMAT(create_time, '%Y-%m-%d') = #{createTime}
     </select>
 
     <resultMap id="showTargetItemMap" type="com.hongyun.dto.vo.TargetItemVo">
@@ -41,7 +41,7 @@
         FROM target_item AS ti
                  LEFT JOIN target AS t ON t.id = ti.target_id
         WHERE
-            DATE ( ti.create_time ) = #{createTime}
+            DATE_FORMAT(ti.create_time, '%Y-%m-%d') = #{createTime}
           AND ti.user_id = #{userId} LIMIT #{offset}
             , #{limit}
     </select>
@@ -62,9 +62,9 @@
 
     <select id="getNowTimeTotalTargetItems" parameterType="map" resultType="int">
         SELECT COUNT(*)
-        FROM target
+        FROM target_item
         WHERE user_id = #{userId}
-          and DATE (create_time) = #{createTime}
+          and DATE_FORMAT(create_time, '%Y-%m-%d') = #{createTime}
     </select>
 
     <resultMap id="dashTargetItemResultMap" type="com.hongyun.entity.DashTargetItem">
