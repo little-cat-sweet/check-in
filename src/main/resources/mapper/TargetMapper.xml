@@ -31,6 +31,7 @@
     <select id="findAll" resultMap="targetResultMap" parameterType="map">
         SELECT *
         FROM target
+        ORDER BY create_time DESC
     </select>
 
     <update id="updateBy" parameterType="map">

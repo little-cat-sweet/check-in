@@ -22,6 +22,7 @@
         FROM target_item
         WHERE user_id = #{userId}
           AND DATE_FORMAT(create_time, '%Y-%m-%d') = #{createTime}
+        ORDER BY create_time DESC
     </select>
 
     <resultMap id="showTargetItemMap" type="com.hongyun.dto.vo.TargetItemVo">
@@ -42,7 +43,8 @@
                  LEFT JOIN target AS t ON t.id = ti.target_id
         WHERE
             DATE_FORMAT(ti.create_time, '%Y-%m-%d') = #{createTime}
-          AND ti.user_id = #{userId} LIMIT #{offset}
+          AND ti.user_id = #{userId}
+        ORDER BY ti.create_time DESC LIMIT #{offset}
             , #{limit}
     </select>
 
@@ -82,6 +84,7 @@
         WHERE ti.user_id = #{userId}
           AND ti.create_time >= #{fromDate}
           AND ti.create_time &lt; #{endDate}
+        ORDER BY ti.create_time DESC
     </select>
 
     <delete id="deleteByTargetId" parameterType="java.lang.Integer">
