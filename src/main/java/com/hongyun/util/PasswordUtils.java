@@ -1,31 +1,20 @@
 package com.hongyun.util;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-
-import javax.crypto.Cipher;
-import javax.crypto.spec.SecretKeySpec;
-import java.security.Key;
-import java.util.Base64;
 
 @Component
 public class PasswordUtils {
-    private static final String key = "1234567890123456"; // 16 字节长度的密钥
-    private static final String ALGORITHM = "AES";
-    private static final String TRANSFORMATION = "AES/ECB/PKCS5Padding";
 
-    public String encrypt(String password) throws Exception {
-        Key secretKey = new SecretKeySpec(key.getBytes(), ALGORITHM);
-        Cipher cipher = Cipher.getInstance(TRANSFORMATION);
-        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-        byte[] encryptedBytes = cipher.doFinal(password.getBytes());
-        return Base64.getEncoder().encodeToString(encryptedBytes);
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    public String encrypt(String rawPassword) {
+        return passwordEncoder.encode(rawPassword);
     }
 
-    public String decrypt(String encryptedPassword) throws Exception {
-        Key secretKey = new SecretKeySpec(key.getBytes(), ALGORITHM);
-        Cipher cipher = Cipher.getInstance(TRANSFORMATION);
-        cipher.init(Cipher.DECRYPT_MODE, secretKey);
-        byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(encryptedPassword));
-        return new String(decryptedBytes);
+    public boolean matches(String rawPassword, String encodedPassword) {
+        return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 }

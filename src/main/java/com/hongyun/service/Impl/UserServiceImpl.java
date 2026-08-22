@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public String login(String email, String password) throws Exception {
         User user = userMapper.findByEmail(email);
-        if (!Objects.isNull(user) && passwordUtils.decrypt(user.getPassword()).equals(password)) {
+        if (!Objects.isNull(user) && passwordUtils.matches(password, user.getPassword())) {
             return getTokenAndInitUserInfoInRedis(user);
         }
         return null;
