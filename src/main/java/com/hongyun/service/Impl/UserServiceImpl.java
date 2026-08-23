@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
         Map<String, Object> userMap = BeanUtil.beanToMap(userVo, new HashMap<>(), CopyOptions.create().setIgnoreNullValue(true)
                 .setFieldValueEditor((fieldName, fieldValue) -> fieldValue == null ? "" : fieldValue.toString()));
         stringRedisTemplate.opsForHash().putAll(RedisConstants.LOGIN_CODE_TOKEN + token, userMap);
-        stringRedisTemplate.expire(RedisConstants.LOGIN_CODE_TOKEN + token, Duration.ofHours(1));
+        stringRedisTemplate.expire(RedisConstants.LOGIN_CODE_TOKEN + token, Duration.ofHours(2));
         return token;
     }
 
